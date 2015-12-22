@@ -129,6 +129,8 @@ nodist_weston_SOURCES =					\
 	protocol/scaler-server-protocol.h		\
 	protocol/linux-dmabuf-protocol.c		\
 	protocol/linux-dmabuf-server-protocol.h
+	protocol/tablet-unstable-v1-protocol.c				\
+	protocol/tablet-unstable-v1-server-protocol.h
 
 BUILT_SOURCES += $(nodist_weston_SOURCES)
 
@@ -559,7 +561,9 @@ nodist_libtoytoolkit_la_SOURCES =			\
 	protocol/xdg-shell-protocol.c			\
 	protocol/xdg-shell-client-protocol.h		\
 	protocol/ivi-application-protocol.c		\
-	protocol/ivi-application-client-protocol.h
+	protocol/ivi-application-client-protocol.h	\
+	protocol/tablet-unstable-v1-protocol.c		\
+	protocol/tablet-unstable-v1-client-protocol.h
 
 BUILT_SOURCES += $(nodist_libtoytoolkit_la_SOURCES)
 
@@ -770,7 +774,10 @@ BUILT_SOURCES +=					\
 	protocol/ivi-hmi-controller-protocol.c		\
 	protocol/ivi-hmi-controller-client-protocol.h	\
 	protocol/ivi-application-protocol.c		\
-	protocol/ivi-application-client-protocol.h
+	protocol/ivi-application-client-protocol.h	\
+	protocol/tablet-unstable-v1-protocol.c		\
+	protocol/tablet-unstable-v1-client-protocol.h
+
 
 westondatadir = $(datadir)/weston
 dist_westondata_DATA =				\
