@@ -428,6 +428,12 @@ handle_tablet_proximity(struct libinput_device *libinput_device,
 		    tool->capabilities |= 1 << ZWP_TABLET_TOOL_V1_CAPABILITY_PRESSURE;
 		if (libinput_tablet_tool_has_tilt(libinput_tool))
 		    tool->capabilities |= 1 << ZWP_TABLET_TOOL_V1_CAPABILITY_TILT;
+		if (libinput_tablet_tool_has_rotation(libinput_tool))
+		    tool->capabilities |= 1 << ZWP_TABLET_TOOL_V1_CAPABILITY_ROTATION;
+		if (libinput_tablet_tool_has_slider(libinput_tool))
+		    tool->capabilities |= 1 << ZWP_TABLET_TOOL_V1_CAPABILITY_SLIDER;
+		if (libinput_tablet_tool_has_wheel(libinput_tool))
+		    tool->capabilities |= 1 << ZWP_TABLET_TOOL_V1_CAPABILITY_WHEEL;
 
 		wl_list_insert(&device->seat->tablet_tool_list, &tool->link);
 		notify_tablet_tool_added(tool);

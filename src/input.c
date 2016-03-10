@@ -2176,6 +2176,24 @@ notify_tablet_tool_tilt(struct weston_tablet_tool *tool,
 }
 
 WL_EXPORT void
+notify_tablet_tool_rotation(struct weston_tablet_tool *tool,
+			    uint32_t time, int32_t degrees)
+{
+}
+
+WL_EXPORT void
+notify_tablet_tool_slider(struct weston_tablet_tool *tool,
+			  uint32_t time, int32_t position)
+{
+}
+
+WL_EXPORT void
+notify_tablet_tool_wheel(struct weston_tablet_tool *tool,
+			 uint32_t time, int32_t degrees, int32_t clicks)
+{
+}
+
+WL_EXPORT void
 notify_tablet_tool_button(struct weston_tablet_tool *tool,
 			  uint32_t time,
 			  uint32_t button,
