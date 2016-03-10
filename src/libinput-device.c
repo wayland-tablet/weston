@@ -387,6 +387,21 @@ handle_tablet_proximity(struct libinput_device *libinput_device,
 	case LIBINPUT_TABLET_TOOL_TYPE_ERASER:
 		type = ZWP_TABLET_TOOL_V1_TYPE_ERASER;
 		break;
+	case LIBINPUT_TABLET_TOOL_TYPE_BRUSH:
+		type = ZWP_TABLET_TOOL_V1_TYPE_BRUSH;
+		break;
+	case LIBINPUT_TABLET_TOOL_TYPE_PENCIL:
+		type = ZWP_TABLET_TOOL_V1_TYPE_PENCIL;
+		break;
+	case LIBINPUT_TABLET_TOOL_TYPE_AIRBRUSH:
+		type = ZWP_TABLET_TOOL_V1_TYPE_AIRBRUSH;
+		break;
+	case LIBINPUT_TABLET_TOOL_TYPE_MOUSE:
+		type = ZWP_TABLET_TOOL_V1_TYPE_MOUSE;
+		break;
+	case LIBINPUT_TABLET_TOOL_TYPE_LENS:
+		type = ZWP_TABLET_TOOL_V1_TYPE_LENS;
+		break;
 	default:
 		fprintf(stderr, "Unknown libinput tool type %d\n",
 			libinput_tool_type);
