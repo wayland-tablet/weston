@@ -512,6 +512,32 @@ handle_tablet_axis(struct libinput_device *libinput_device,
 		ty *= DEGREE_AXIS_SCALE;
 		notify_tablet_tool_tilt(tool, time, tx, ty);
 	}
+	if (libinput_event_tablet_tool_rotation_has_changed(axis_event)) {
+		double rotation;
+
+		rotation = libinput_event_tablet_tool_get_rotation(axis_event);
+		/* convert axis units from degrees to centi-degrees */
+		rotation *= DEGREE_AXIS_SCALE;
+		notify_tablet_tool_rotation(tool, time, rotation);
+	}
+	if (libinput_event_tablet_tool_slider_has_changed(axis_event)) {
+		double slider;
+
+		slider = libinput_event_tablet_tool_get_slider_position(axis_event);
+		/* convert axis range [0.0, 1.0] to [0, 65535] */
+		slider *= NORMALIZED_AXIS_MAX;
+		notify_tablet_tool_slider(tool, time, slider);
+	}
+	if (libinput_event_tablet_tool_wheel_has_changed(axis_event)) {
+		double angle;
+		int32_t clicks;
+
+		angle = libinput_event_tablet_tool_get_wheel_delta(axis_event);
+		clicks = libinput_event_tablet_tool_get_wheel_delta_discrete(axis_event);
+		/* convert axis units from degrees to centi-degrees */
+		angle *= DEGREE_AXIS_SCALE;
+		notify_tablet_tool_wheel(tool, time, angle, clicks);
+	}
 
 	notify_tablet_tool_frame(tool, time);
 }
