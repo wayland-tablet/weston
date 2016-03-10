@@ -460,6 +460,7 @@ handle_tablet_axis(struct libinput_device *libinput_device,
 	struct libinput_tablet_tool *libinput_tool;
 	uint32_t time;
 	const int NORMALIZED_AXIS_MAX = 65535;
+	const int DEGREE_AXIS_SCALE = 100;
 
 	libinput_tool = libinput_event_tablet_tool_get_tool(axis_event);
 	tool = libinput_tablet_tool_get_user_data(libinput_tool);
@@ -506,9 +507,9 @@ handle_tablet_axis(struct libinput_device *libinput_device,
 
 		tx = libinput_event_tablet_tool_get_tilt_x(axis_event);
 		ty = libinput_event_tablet_tool_get_tilt_y(axis_event);
-		/* convert axis range [-1.0, 1.0] to [-65535, 65535] */
-		tx *= NORMALIZED_AXIS_MAX;
-		ty *= NORMALIZED_AXIS_MAX;
+		/* convert axis units from degrees to centi-degrees */
+		tx *= DEGREE_AXIS_SCALE;
+		ty *= DEGREE_AXIS_SCALE;
 		notify_tablet_tool_tilt(tool, time, tx, ty);
 	}
 
