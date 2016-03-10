@@ -345,6 +345,16 @@ struct weston_tablet_tool_grab_interface {
 		     uint32_t time,
 		     int32_t tilt_x,
 		     int32_t tilt_y);
+	void (*rotation)(struct weston_tablet_tool_grab *grab,
+			 uint32_t time,
+			 int32_t degrees);
+	void (*slider)(struct weston_tablet_tool_grab *grab,
+		       uint32_t time,
+		       int32_t position);
+	void (*wheel)(struct weston_tablet_tool_grab *grab,
+		      uint32_t time,
+		      int32_t degrees,
+		      int32_t clicks);
 	void (*button)(struct weston_tablet_tool_grab *grab,
 		       uint32_t time,
 		       uint32_t button,

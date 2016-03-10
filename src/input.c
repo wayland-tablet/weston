@@ -1079,6 +1079,52 @@ default_grab_tablet_tool_tilt(struct weston_tablet_tool_grab *grab,
 }
 
 static void
+default_grab_tablet_tool_rotation(struct weston_tablet_tool_grab *grab,
+				  uint32_t time,
+				  int32_t degrees)
+{
+	struct weston_tablet_tool *tool = grab->tool;
+	struct wl_resource *resource;
+	struct wl_list *resource_list = &tool->focus_resource_list;
+
+	if (!wl_list_empty(resource_list)) {
+		wl_resource_for_each(resource, resource_list)
+			zwp_tablet_tool_v1_send_rotation(resource, degrees);
+	}
+}
+
+static void
+default_grab_tablet_tool_slider(struct weston_tablet_tool_grab *grab,
+				uint32_t time,
+				int32_t position)
+{
+	struct weston_tablet_tool *tool = grab->tool;
+	struct wl_resource *resource;
+	struct wl_list *resource_list = &tool->focus_resource_list;
+
+	if (!wl_list_empty(resource_list)) {
+		wl_resource_for_each(resource, resource_list)
+			zwp_tablet_tool_v1_send_slider(resource, position);
+	}
+}
+
+static void
+default_grab_tablet_tool_wheel(struct weston_tablet_tool_grab *grab,
+			       uint32_t time,
+			       int32_t degrees,
+			       int32_t clicks)
+{
+	struct weston_tablet_tool *tool = grab->tool;
+	struct wl_resource *resource;
+	struct wl_list *resource_list = &tool->focus_resource_list;
+
+	if (!wl_list_empty(resource_list)) {
+		wl_resource_for_each(resource, resource_list)
+			zwp_tablet_tool_v1_send_wheel(resource, degrees, clicks);
+	}
+}
+
+static void
 default_grab_tablet_tool_button(struct weston_tablet_tool_grab *grab,
 				uint32_t time,
 				uint32_t button,
@@ -1125,6 +1171,9 @@ static struct weston_tablet_tool_grab_interface default_tablet_tool_grab_interfa
 	default_grab_tablet_tool_pressure,
 	default_grab_tablet_tool_distance,
 	default_grab_tablet_tool_tilt,
+	default_grab_tablet_tool_rotation,
+	default_grab_tablet_tool_slider,
+	default_grab_tablet_tool_wheel,
 	default_grab_tablet_tool_button,
 	default_grab_tablet_tool_frame,
 	default_grab_tablet_tool_cancel,
@@ -2489,18 +2538,33 @@ WL_EXPORT void
 notify_tablet_tool_rotation(struct weston_tablet_tool *tool,
 			    uint32_t time, int32_t degrees)
 {
+	struct weston_tablet_tool_grab *grab = tool->grab;
+
+	weston_compositor_wake(tool->seat->compositor);
+
+	grab->interface->rotation(grab, time, degrees);
 }
 
 WL_EXPORT void
 notify_tablet_tool_slider(struct weston_tablet_tool *tool,
 			  uint32_t time, int32_t position)
 {
+	struct weston_tablet_tool_grab *grab = tool->grab;
+
+	weston_compositor_wake(tool->seat->compositor);
+
+	grab->interface->slider(grab, time, position);
 }
 
 WL_EXPORT void
 notify_tablet_tool_wheel(struct weston_tablet_tool *tool,
 			 uint32_t time, int32_t degrees, int32_t clicks)
 {
+	struct weston_tablet_tool_grab *grab = tool->grab;
+
+	weston_compositor_wake(tool->seat->compositor);
+
+	grab->interface->wheel(grab, time, degrees, clicks);
 }
 
 WL_EXPORT void
