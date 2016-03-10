@@ -1859,6 +1859,27 @@ tablet_tool_noop_grab_tilt(struct weston_tablet_tool_grab *grab,
 {
 }
 
+static void
+tablet_tool_noop_grab_rotation(struct weston_tablet_tool_grab *grab,
+			       uint32_t time,
+			       int32_t degrees)
+{
+}
+
+static void
+tablet_tool_noop_grab_slider(struct weston_tablet_tool_grab *grab,
+			     uint32_t time,
+			     int32_t position)
+{
+}
+
+static void
+tablet_tool_noop_grab_wheel(struct weston_tablet_tool_grab *grab,
+			    uint32_t time,
+			    int32_t degrees, int32_t clicks)
+{
+}
+
 static void tablet_tool_noop_grab_button(struct weston_tablet_tool_grab *grab,
 					 uint32_t time, uint32_t button,
 					 enum zwp_tablet_tool_v1_button_state state)
@@ -1890,6 +1911,9 @@ static struct weston_tablet_tool_grab_interface tablet_tool_move_grab_interface 
 	tablet_tool_noop_grab_pressure,
 	tablet_tool_noop_grab_distance,
 	tablet_tool_noop_grab_tilt,
+	tablet_tool_noop_grab_rotation,
+	tablet_tool_noop_grab_slider,
+	tablet_tool_noop_grab_wheel,
 	tablet_tool_noop_grab_button,
 	tablet_tool_noop_grab_frame,
 	tablet_tool_move_grab_cancel,
