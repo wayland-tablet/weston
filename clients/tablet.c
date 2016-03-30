@@ -53,6 +53,15 @@ double current_pressure;
 #define WL_TABLET_AXIS_MAX 65535
 
 static void
+set_pen_parameters(cairo_t *drawing_cr, uint32_t rgb, uint32_t scale, uint32_t min)
+{
+	cairo_set_source_rgb(drawing_cr, (rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF);
+	cairo_set_line_width(drawing_cr,
+			     current_pressure /
+			     WL_TABLET_AXIS_MAX * scale + min);
+}
+
+static void
 redraw_handler(struct widget *widget, void *data)
 {
 	cairo_surface_t *surface;
@@ -79,16 +88,23 @@ redraw_handler(struct widget *widget, void *data)
 		if (old_x != -1 && old_y != -1) {
 			drawing_cr = cairo_create(draw_buffer);
 			if (tool_type == ZWP_TABLET_TOOL_V1_TYPE_PEN) {
-				cairo_set_source_rgb(drawing_cr, 1, 1, 1);
-				cairo_set_line_width(drawing_cr,
-						     current_pressure /
-						     WL_TABLET_AXIS_MAX * 7 + 1);
+				set_pen_parameters(drawing_cr, 0xFFFFFF, 7, 1);
 			} else if (tool_type == ZWP_TABLET_TOOL_V1_TYPE_ERASER) {
 				cairo_set_operator(drawing_cr, CAIRO_OPERATOR_CLEAR);
-				cairo_set_source_rgb(drawing_cr, 0, 0, 0);
-				cairo_set_line_width(drawing_cr,
-						     current_pressure /
-						     WL_TABLET_AXIS_MAX * 30 + 10);
+				set_pen_parameters(drawing_cr, 0xFFFFFF, 30, 10);
+			} else if (tool_type == ZWP_TABLET_TOOL_V1_TYPE_BRUSH) {
+				set_pen_parameters(drawing_cr, 0xFF0000, 7, 1);
+			} else if (tool_type == ZWP_TABLET_TOOL_V1_TYPE_PENCIL) {
+				set_pen_parameters(drawing_cr, 0x00FF00, 7, 1);
+			} else if (tool_type == ZWP_TABLET_TOOL_V1_TYPE_AIRBRUSH) {
+				set_pen_parameters(drawing_cr, 0x0000FF, 30, 10);
+			} else if (tool_type == ZWP_TABLET_TOOL_V1_TYPE_MOUSE) {
+				set_pen_parameters(drawing_cr, 0xFFFF00, 5, 1);
+			} else if (tool_type == ZWP_TABLET_TOOL_V1_TYPE_LENS) {
+				set_pen_parameters(drawing_cr, 0xFF00FF, 5, 1);
+			} else {
+				fprintf(stderr, "unknown tool type: %d\n", tool_type);
+				set_pen_parameters(drawing_cr, 0xF0F0F0, 7, 1);
 			}
 
 			cairo_set_line_cap(drawing_cr, CAIRO_LINE_CAP_ROUND);
@@ -162,6 +178,15 @@ proximity_in_handler(struct widget *widget, struct tablet_tool *tool,
 }
 
 static void
+proximity_out_handler(struct widget *widget, struct tablet_tool *tool,
+		      void *data)
+{
+	tablet_is_down = false;
+	old_x = -1;
+	old_y = -1;
+}
+
+static void
 pressure_handler(struct widget *widget, struct tablet_tool *tool,
 		 uint32_t pressure, void *data)
 {
@@ -219,7 +244,7 @@ init_globals(void)
 	widget_set_tablet_tool_up_handler(widget, tablet_up_handler);
 	widget_set_tablet_tool_proximity_handlers(widget,
 						  proximity_in_handler,
-						  NULL);
+						  proximity_out_handler);
 	widget_set_redraw_handler(widget, redraw_handler);
 	widget_set_resize_handler(widget, resize_handler);
 
