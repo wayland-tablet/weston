@@ -227,6 +227,14 @@ tablet_up_handler(struct widget *widget, struct tablet_tool *tool, void *data)
 }
 
 static void
+tablet_button_handler(struct widget *widget, struct tablet_tool *tool,
+		      uint32_t button, enum zwp_tablet_tool_v1_button_state state,
+		      void *data)
+{
+		fprintf(stderr, "button %d value %d\n", button, state);
+}
+
+static void
 init_globals(void)
 {
 	window = window_create(display);
@@ -245,6 +253,7 @@ init_globals(void)
 	widget_set_tablet_tool_proximity_handlers(widget,
 						  proximity_in_handler,
 						  proximity_out_handler);
+	widget_set_tablet_tool_button_handler(widget, tablet_button_handler);
 	widget_set_redraw_handler(widget, redraw_handler);
 	widget_set_resize_handler(widget, resize_handler);
 
