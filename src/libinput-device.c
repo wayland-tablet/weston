@@ -353,6 +353,10 @@ handle_touch_frame(struct libinput_device *libinput_device,
 }
 
 static void
+handle_tablet_axis(struct libinput_device *libinput_device,
+                   struct libinput_event_tablet_tool *axis_event);
+
+static void
 handle_tablet_proximity(struct libinput_device *libinput_device,
 			struct libinput_event_tablet_tool *proximity_event)
 {
@@ -442,8 +446,7 @@ handle_tablet_proximity(struct libinput_device *libinput_device,
 	}
 
 	notify_tablet_tool_proximity_in(tool, time, tablet);
-	/* FIXME: we should send axis updates  here */
-	notify_tablet_tool_frame(tool, time);
+	handle_tablet_axis(libinput_device, proximity_event);
 }
 
 static void
