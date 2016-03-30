@@ -1058,7 +1058,7 @@ default_grab_tablet_tool_distance(struct weston_tablet_tool_grab *grab,
 
 	if (!wl_list_empty(resource_list)) {
 		wl_resource_for_each(resource, resource_list)
-			zwp_tablet_tool_v1_send_pressure(resource, distance);
+			zwp_tablet_tool_v1_send_distance(resource, distance);
 	}
 }
 
