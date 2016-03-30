@@ -5716,8 +5716,14 @@ tablet_tool_handle_proximity_out(void *data,
 				 struct zwp_tablet_tool_v1 *zwp_tablet_tool_v1)
 {
 	struct tablet_tool *tool = data;
+	struct widget *old = tool->focus_widget;
+
+	if (old && old->tablet_tool_prox_out_handler)
+		old->tablet_tool_prox_out_handler(old, tool,
+						  widget_get_user_data(old));
 
 	tool->focus = NULL;
+	tool->focus_widget = NULL;
 	tool->current_tablet = NULL;
 }
 
